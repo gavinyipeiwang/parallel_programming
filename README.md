@@ -8,7 +8,7 @@ These two concepts are often confused, especially for people coming from Java ba
 ## The signature of parallel function in Scala.
 I found the following functions very intuitive in terms of understanding the paradigm.
 ```scala
-  def parallel[A, B](taskA: => A, taskB: B): (A, B) = ???
+  def parallel[A, B](taskA: => A, taskB: => B): (A, B) = ???
 
   def nonParallel[A, B](taskA: A, taskB: B): (A, B) = ???
 ```  
