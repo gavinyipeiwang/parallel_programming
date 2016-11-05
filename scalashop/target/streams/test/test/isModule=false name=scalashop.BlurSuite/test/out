@@ -1,0 +1,5 @@
+[0m[[0minfo[0m] [0m[32mBlurSuite:[0m[0m
+[0m[[0minfo[0m] [0m[32m- boxBlurKernel should correctly handle radius 0[0m[0m
+[0m[[0minfo[0m] [0m[32m- boxBlurKernel should return the correct value on an interior pixel of a 3x4 image with radius 1[0m[0m
+[0m[[0minfo[0m] [0m[32m- HorizontalBoxBlur.blur with radius 1 should correctly blur the entire 3x3 image[0m[0m
+[0m[[0minfo[0m] [0m[32m- VerticalBoxBlur.blur with radius 2 should correctly blur the entire 4x3 image[0m[0m
