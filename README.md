@@ -1,2 +1,2 @@
-# parallel_programming
+# Parallel Programming
 Parallel programming concepts
