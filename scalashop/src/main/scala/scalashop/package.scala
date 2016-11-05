@@ -40,32 +40,32 @@ package object scalashop {
   }
 
   /** Computes the blurred RGBA value of a single pixel of the input image. */
-  def boxBlurKernel(src: Img, x: Int, y: Int, radius: Int): RGBA = {
-    radius match {
-      case 0 => src.apply(x, y)
+  def boxBlurKernel(src: Img, x: Int, y: Int, radius: Int): RGBA = radius match {
+    case 0 => src.apply(x, y)
 
-      case rad if rad > 0 => {
-        val xf = clamp(x - radius, 0, src.width - 1)
-        val xt = clamp(x + radius, 0, src.width - 1)
-        val yf = clamp(y - radius, 0, src.height - 1)
-        val yt = clamp(y + radius, 0, src.height - 1)
+    case r if r > 0 => {
+      val xf = clamp(x - radius, 0, src.width - 1)
+      val xt = clamp(x + radius, 0, src.width - 1)
+      val yf = clamp(y - radius, 0, src.height - 1)
+      val yt = clamp(y + radius, 0, src.height - 1)
 
-        val pixels = for (
-          a <- xf to xt;
-          b <- yf to yt
-        ) yield (src(a, b))
+      val pixels = for {
+        a <- xf to xt;
+        b <- yf to yt
+      } yield src(a, b)
 
-        val sum = pixels.map { p =>
-          (red(p), green(p), blue(p), alpha(p))
-        }.foldLeft((0, 0, 0, 0)) { (a, b) =>
-          (a._1 + b._1, a._2 + b._2, a._3 + b._3, a._4 + b._4)
-        }
-        rgba(sum._1 / pixels.length, sum._2 / pixels.length, sum._3 / pixels.length, sum._4 / pixels.length)
-      }
-        
-      case _ => throw new IllegalArgumentException
+      val sum = pixels.map { p =>
+        (red(p), green(p), blue(p), alpha(p))
+      }.reduceLeft(add)
+
+      rgba(sum._1 / pixels.length, sum._2 / pixels.length, sum._3 / pixels.length, sum._4 / pixels.length)
     }
 
+    case _ => throw new IllegalArgumentException
   }
+
+  type RGBAValue = (Int, Int, Int, Int)
+
+  private def add(p1: RGBAValue, p2: RGBAValue): RGBAValue = (p1._1 + p2._1, p1._2 + p2._2, p1._3 + p2._3, p1._4 + p2._4)
 
 }
