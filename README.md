@@ -11,6 +11,24 @@ I found the following functions very intuitive in terms of understanding the par
   def parallel[A, B](taskA: => A, taskB: => B): (A, B) = ???
 
   def nonParallel[A, B](taskA: A, taskB: B): (A, B) = ???
-```  
+```
+Task A and Task B do not any dependency in between, therefore instead of executing they sequentially, they could be executed in parallel.
+## How do I identify TaskA and TaskB for a given computation?
+Keep "Divide and Conquer" in mind. In the following example, Task A and B refer to the pointwise exponent process for a given array from index left to right:
+```scala
+def normsOfPar(inp: Array[Int], p: Double, left: Int, right: Int, out: Array): Unit = {
+  if (right - left < threshold) {
+    var i = left
+    while (i < right) {
+      inp(i) = Math.pow(inp(i), p).toInt
+      i += 1
+    }
+  } else {
+    val mid = (left + right) / 2
+    parallel(normsOfPar(inp, p, left, mid, out), normsOfPar(inp, p, mid, right, out))
+  }
+}
+```
+
 
 
