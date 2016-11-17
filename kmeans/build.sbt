@@ -6,6 +6,7 @@ scalacOptions ++= Seq("-deprecation")
 
 courseId := "GVy8tIIKEeWXmQ4F86nmrw"
 
+
 // grading libraries
 libraryDependencies += "junit" % "junit" % "4.10" % "test"
 libraryDependencies ++= assignmentsMap.value.values.flatMap(_.dependencies).toSeq
