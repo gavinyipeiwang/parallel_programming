@@ -40,27 +40,27 @@ def fold(z: A)(f: (A, A) => A): A
 ### Parallel Collection Hierarchy
 Traits ParIterable[T], ParSeq[T], ParSet[T] and ParMap[K, V]. Side effecting operations are not parallelizable. Avoid mutations to the same memory locations without proper synchronization. Never write/read to a collection that is concurrently traversed.
 ### Data-Parallel Abstraction
-1. Iterators
-2. Splitters
-  ```scala
-    trait Splitter[A] extends Iterator[A] {
-      def split: Seq[Splitter[A]]
-      def remaining: Int
-    }
-  ```
-3. Builders
-  ```scala
-    trait Builder[A, Repr] {
-      def +=(elem: A): Builder[A, Repr]
-      def result: Repr
-    }
-  ```
-4. Combiners
-  ```scala
-    trait Combiner[A, Repr] extends Builder[A, Repr] {
-      def combine(that: Combiner[A, Repr]): Combiner[A, Repr]
-    }
-  ```
+Iterators
+Splitters
+```scala
+  trait Splitter[A] extends Iterator[A] {
+    def split: Seq[Splitter[A]]
+    def remaining: Int
+  }
+```
+Builders
+```scala
+  trait Builder[A, Repr] {
+    def +=(elem: A): Builder[A, Repr]
+    def result: Repr
+  }
+```
+Combiners
+```scala
+  trait Combiner[A, Repr] extends Builder[A, Repr] {
+    def combine(that: Combiner[A, Repr]): Combiner[A, Repr]
+  }
+```
 
 
 
