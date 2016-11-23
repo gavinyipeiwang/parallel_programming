@@ -41,6 +41,7 @@ def fold(z: A)(f: (A, A) => A): A
 Traits ParIterable[T], ParSeq[T], ParSet[T] and ParMap[K, V]. Side effecting operations are not parallelizable. Avoid mutations to the same memory locations without proper synchronization. Never write/read to a collection that is concurrently traversed.
 ### Data-Parallel Abstraction
 Iterators
+
 Splitters
 ```scala
   trait Splitter[A] extends Iterator[A] {
