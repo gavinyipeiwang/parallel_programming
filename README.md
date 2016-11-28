@@ -62,6 +62,44 @@ Combiners
     def combine(that: Combiner[A, Repr]): Combiner[A, Repr]
   }
 ```
+### Data Structures for Parallel Computing
+Most data structures can be constructed in parallel using two-phase construction. For example,
+```scala
+  class ArrayCombiner[T <: AnyRef: ClassTag](val parallelism: Int) {
+    //number of elements in combiner
+    private var numElems = 0
+    private val buffers = new ArrayBuffer[ArrayBuffer[T]]
+    //two dimensional array buffer
+    buffers += new ArrayBuffer[T]
+
+    def +=(x: T) = {
+      buffer.last += x
+      numElems += 1
+      this
+    }
+
+    def combine(that: ArrayCombiner[T]) = {
+      //unlike normal array copy, in this case just copy the reference
+      buffers ++= that.buffers
+      numElems += that.numElems
+      this
+    }
+
+    def result: Array[T] = {
+      val array = new Array[T](numElems)
+      val step = math.max(1, numElems / parallelism)
+      val starts = (0 until numElems by step) :+ numElems
+      val chunks = starts.zip(starts.tail)
+      //combine arrays in parallel
+      val tasks = for ((from, end) <- chunks) yield task {
+        copyTo(array, from, end)
+      }
+      tasks.foreach(_.join())
+      array
+    }
+  }
+```
+The key here is to find the right intermediate data structure, like the two dimensional array buffer for array combiner.
 
 
 
